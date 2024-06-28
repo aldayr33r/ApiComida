@@ -3,16 +3,20 @@ const app=express();
 const morgan=require("morgan");
 const port=3500
 const dbconnect = require("./config/conexion");
+const cors = require('cors')
+const rutas = require('./routes/login')
+require('dotenv').config();
+
 //const comidaRouter= require('./routes/comidaRouter')
 
 app.use(express.urlencoded({extended:false}))
 app.use(express.json());
+app.use(cors());
 
 app.use(morgan('dev'))
 //app.use('/Api', comidaRouter)
 
-
-
+app.use(rutas)
 
 app.get("/", (req,res)=>{
     res.json({mensage:"Welcome to my server"})
