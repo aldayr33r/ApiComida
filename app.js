@@ -6,6 +6,7 @@ const dbconnect = require("./config/conexion");
 const cors = require('cors')
 const rutas = require('./routes/login')
 require('dotenv').config();
+const platillosRoutes = require('./routes/comida_router');
 
 //const comidaRouter= require('./routes/comidaRouter')
 
@@ -15,7 +16,7 @@ app.use(cors());
 
 app.use(morgan('dev'))
 //app.use('/Api', comidaRouter)
-
+app.use(platillosRoutes);
 app.use(rutas)
 
 app.get("/", (req,res)=>{
