@@ -27,17 +27,20 @@ const newPlatillos = async(req, res, next) => {
 }; 
 
 const updatePlatillos = async(req, res, next) => {
-  const nombrePlatillo = req.params.nombre;
-  const { nombre, descripcion, precio, ingredientes } = req.body;
-  if (!nombrePlatillo) {
+  const key = req.params.key;
+  const value = req.params.value;
+  const updateData = req.body;
+   let query = {};
+    query[key] = value;
+
+  if (!value) {
     return res.status(400).json({ message: 'No se tiene en db se platillo'});
   }
 
   try {
     const platillo = await Platillo.findOneAndUpdate(
-      { nombre: nombrePlatillo }, // Filtro para encontrar el platillo por nombre
-      { nombre, descripcion, precio, ingredientes }, // Campos a actualizar
-      { new: true, runValidators: true } // Opciones
+      query, updateData ,   { new: true, runValidators: true }  // Filtro para encontrar el platillo por nombre// Campos a actualizar
+   // Opciones
     );
 
     if (!platillo) {
@@ -66,37 +69,41 @@ const listar_todo = async (req, res) => {
 };
 
 const eliminarPlatilloPorNombre = async (req, res) => {
-    try {
-      const nombre = req.params.nombre;
-      const resultado = await Platillo.findOneAndDelete({ nombre });
-  
-      if (!resultado) {
-        return res.status(404).json({ mensaje: 'Platillo no encontrado' });
-      }
-  
-      res.json({ mensaje: 'Platillo eliminado correctamente' });
-    } catch (error) {
-      res.status(500).json({ mensaje: 'Error al eliminar el platillo', error });
+  try {
+    const key = req.params.key;
+    const value=   req.params.value;
+    let query = {};
+    query[key] = value;
+    const resultado = await Platillo.findOneAndDelete(query);
+
+    if (!resultado) {
+      return res.status(404).json({ mensaje: 'Platillo no encontrado' });
     }
-  };
-  
+
+    res.json({ mensaje: 'Platillo eliminado correctamente' });
+  } catch (error) {
+    res.status(500).json({ mensaje: 'Error al eliminar el platillo', error });
+  }
+};
+
 
 const buscarPlatilloPorNombre = async (req, res) => {
-  try{
-    const consNombre = req.params.nombre;
-    const resultado = await Platillo.findOne({ nombre: consNombre });
-  if(!resultado){
-    return res.status(404).json({ mensaje: 'Platillo no encontrado' });
-  }
-    const { nombre: nombrePlatillo, descripcion, precio ,ingredientes} = resultado;
-    res.json({ 
-      mensaje: 'Platillo encontrado:',
-      platillo: { nombre: nombrePlatillo, precio, descripcion,ingredientes }
-    });
-  }
-  catch(error){
-    res.status(500).json({ mensaje: 'Error al buscar el platillo', error });
-  }
+
+try{
+  const key = req.params.key;
+  const value=   req.params.value;
+  let query = {};
+  query[key] = value;
+  const resultado = await Platillo.findOne(query);
+if(!resultado){
+  return res.status(404).json({ mensaje: 'Platillo no encontrado' });
+}
+  
+res.json(resultado);
+}
+catch(error){
+  res.status(500).json({ mensaje: 'Error al buscar el platillo', error });
+}
 
 };
   
