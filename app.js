@@ -1,7 +1,7 @@
 const express= require("express");
 const app=express();
 const morgan=require("morgan");
-const port=3500
+const port= process.env.PORT || 3000;
 const dbconnect = require("./config/conexion");
 const cors = require('cors')
 const rutas = require('./routes/login')
