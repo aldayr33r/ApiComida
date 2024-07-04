@@ -1,9 +1,12 @@
 const mongoose = require('mongoose');
-//Nombre Base De datos: ApiComida
+require('dotenv').config(); // Para cargar variables de entorno desde un archivo .env
+
+// Nombre Base De datos: ApiComida
 const dbconnect = async () => {
     try {
         mongoose.set('strictQuery', true);
-        await mongoose.connect('mongodb://127.0.0.1:27017/ApiComida', {});
+        const uri = `mongodb+srv://joan:${process.env.MONGODB_PASSWORD}@cluster0.tppmkru.mongodb.net/ApiComida?retryWrites=true&w=majority&appName=Cluster0`;
+        await mongoose.connect(uri, {});
         console.log("Conexión correcta");
     } catch (error) {
         console.error("Error en la conexión", error);
