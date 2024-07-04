@@ -1,6 +1,8 @@
-const { Schema, model } = require('mongoose');
+
 const bcrypt = require('bcrypt'); 
 
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 //  Modelo user
 const userSchema = new Schema({
     usuario: { type: String, required: true },
@@ -27,4 +29,5 @@ userSchema.methods.validatePassword = async function(password) {
     }
 };
 
-module.exports = model('User', userSchema);
+const User = mongoose.model('User', userSchema);
+module.exports = User;
