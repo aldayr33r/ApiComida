@@ -1,33 +1,44 @@
-const express= require("express");
-const app=express();
-const morgan=require("morgan");
-const port= process.env.PORT || 3000;
+const express = require("express");
+const morgan = require("morgan");
+const cors = require('cors');
 const dbconnect = require("./config/conexion");
-const cors = require('cors')
-const rutas = require('./routes/login')
+const comidaRouter = require('./routes/comida_router');
+const rutas = require('./routes/login');
 require('dotenv').config();
-const comidaRouter= require('./routes/comida_router')
 
-app.use(express.urlencoded({extended:false}))
+
+const app = express();
+const port = process.env.PORT || 3000;
+
+// Middleware
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
+app.use(morgan('dev'));
 
-app.use(morgan('dev'))
-app.use('/Api', comidaRouter)
-app.use(rutas)
+// Rutas
+app.get("/", (req, res) => {
+    res.json({ message: "Welcome to my server" });
+});
 
-app.get("/", (req,res)=>{
-    res.json({mensage:"Welcome to my server"})
-}
-)
+app.use('/api', comidaRouter); // Monta las rutas de comida bajo /api
+app.use('/auth', rutas);       // Monta las rutas de autenticación bajo /auth
 
+// Middleware para manejar rutas no encontradas
 app.use((req, res) => {
     res.status(404).json({ message: 'Ruta no encontrada' });
 });
 
-app.listen(port,()=>{
-    console.log(`Server is running on port ${port}`)
-})
+// Middleware para manejar errores
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ message: 'Error interno del servidor' });
+});
 
-
+// Conexión a la base de datos
 dbconnect();
+
+// Iniciar el servidor
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});
