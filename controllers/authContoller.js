@@ -24,10 +24,10 @@ const login = async (req, res, next) => {
         if (!validPassword) {
             return res.status(400).json({ auth: false, message: 'Contraseña incorrecta' });
         }
-
+/* 
         if (!user.isVerified) {
             return res.status(403).json({ auth: false, message: 'Usuario no verificado. Por favor, completa el registro.' });
-        }
+        } */
 
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
             expiresIn: 60 * 60 * 24

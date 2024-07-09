@@ -22,7 +22,7 @@ app.get("/", (req, res) => {
 });
 
 app.use('/api', comidaRouter); // Monta las rutas de comida bajo /api
-app.use('/auth', rutas);       // Monta las rutas de autenticación bajo /auth
+app.use(rutas);       // Monta las rutas de autenticación bajo /auth
 
 // Middleware para manejar rutas no encontradas
 app.use((req, res) => {

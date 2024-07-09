@@ -18,7 +18,7 @@ const newPlatillos = async(req, res, next) => {
 
     try {
       await nuevoPlatillo.save();
-      res.status(200).json(nuevoPlatillo)
+      res.status(200).json({message:"Se agrego nuevo platillo", Platillo: nuevoPlatillo})
     }catch (error) {
       res.status(400).json({message: error.message})
       next(error);
@@ -53,7 +53,7 @@ const updatePlatillos = async(req, res, next) => {
       return res.status(404).json({ message: 'Platillo no encontrado'});
     }
 
-    res.status(200).json(platillo);
+    res.status(200).json({message:"Se actualizo el platillo", Platillo: platillo});
   } catch (error) {
     res.status(400).send({message: error.message});
     next(error);
