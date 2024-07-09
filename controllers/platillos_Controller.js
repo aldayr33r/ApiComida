@@ -10,10 +10,10 @@ const newPlatillos = async(req, res, next) => {
   }
 
   const nuevoPlatillo = new Platillo({
-    nombre: nombre,
-    descripcion: descripcion,
+    nombre: nombre.toLowerCase(),
+    descripcion: descripcion.toLowerCase(),
     precio: precio,
-    ingredientes: ingredientes,
+    ingredientes: ingredientes.toLowerCase(),
   });
 
     try {
@@ -27,11 +27,17 @@ const newPlatillos = async(req, res, next) => {
 }; 
 
 const updatePlatillos = async(req, res, next) => {
-  const key = req.params.key;
-  const value = req.params.value;
-  const updateData = req.body;
+  const key = req.params.key.toLowerCase();
+  const value = req.params.value.toLowerCase();
+  const { nombre, descripcion, precio, ingredientes } = req.body;
    let query = {};
     query[key] = value;
+    const updateData= {
+      nombre: nombre.toLowerCase(),
+      descripcion: descripcion.toLowerCase(),
+      precio: precio,
+      ingredientes: ingredientes.toLowerCase(),
+    };
 
   if (!value) {
     return res.status(400).json({ message: 'No se tiene en db se platillo'});
@@ -70,8 +76,8 @@ const listar_todo = async (req, res) => {
 
 const eliminarPlatilloPorNombre = async (req, res) => {
   try {
-    const key = req.params.key;
-    const value=   req.params.value;
+    const key = req.params.key.toLowerCase();
+    const value=   req.params.value.toLowerCase();
     let query = {};
     query[key] = value;
     const resultado = await Platillo.findOneAndDelete(query);
@@ -90,8 +96,8 @@ const eliminarPlatilloPorNombre = async (req, res) => {
 const buscarPlatilloPorNombre = async (req, res) => {
 
 try{
-  const key = req.params.key;
-  const value=   req.params.value;
+  const key = req.params.key.toLowerCase();
+  const value=   req.params.value.toLowerCase();
   let query = {};
   query[key] = value;
   const resultado = await Platillo.findOne(query);
